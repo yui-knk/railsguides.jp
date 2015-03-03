@@ -11,6 +11,12 @@ namespace :guides do
       ruby "rails_guides.rb"
     end
 
+    desc "Generate HTML guides"
+    task :search do
+      ENV["WARN_BROKEN_LINKS"] = "1" # authors can't disable this
+      ruby "rails_guides_search.rb"
+    end
+
     desc "Generate .mobi file. The kindlegen executable must be in your PATH. You can get it for free from http://www.amazon.com/kindlepublishing"
     task :kindle do
       unless `kindlerb -v 2> /dev/null` =~ /kindlerb 0.1.1/

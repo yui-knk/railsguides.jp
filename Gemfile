@@ -17,3 +17,5 @@ gem 'nokogiri'
 # Monitoring tools
 gem 'newrelic_rpm'
 
+gem 'rroonga'
+gem 'pry'
