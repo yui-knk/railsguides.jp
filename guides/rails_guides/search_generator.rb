@@ -196,7 +196,7 @@ module RailsGuides
 
         # f.write(result)
       # end
-      html_name = guide.sub(".md", "")
+      html_name = guide.sub(".md", ".html")
       { html_name: html_name, text_groups: @markdown.send(:engine).renderer.text_groups }
     end
 

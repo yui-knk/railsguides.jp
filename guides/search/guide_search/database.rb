@@ -30,6 +30,19 @@ module GuideSearch
       populate_schema
     end
 
+    def close
+      @database.close
+      @database = nil
+    end
+
+    def closed?
+      @database.nil? or @database.closed?
+    end
+
+    def entries
+      Groonga["Entries"]
+    end
+
     def populate_schema
       Groonga::Schema.define do |schema|
         schema.create_table("Entries",

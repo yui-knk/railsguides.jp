@@ -13,7 +13,6 @@ namespace :guides do
 
     desc "Generate HTML guides"
     task :search do
-      ENV["WARN_BROKEN_LINKS"] = "1" # authors can't disable this
       ruby "rails_guides_search.rb"
     end
 
