@@ -69,5 +69,6 @@ texts_hashs = RailsGuides::SearchGenerator.new.generate
 database = GuideSearch::Database.new
 database_base_dir = File.expand_path('../tmp', __FILE__)
 database.open(database_base_dir) do |db|
+  db.purge
   GuideSearch::Indexer.new(db, texts_hashs).index
 end

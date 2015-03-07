@@ -30,6 +30,16 @@ module GuideSearch
       populate_schema
     end
 
+    def purge
+      path = @database.path
+      encoding = @database.encoding
+      @database.remove
+      directory = File.dirname(path)
+      FileUtils.rm_rf(directory)
+      FileUtils.mkdir_p(directory)
+      populate(path)
+    end
+
     def close
       @database.close
       @database = nil
