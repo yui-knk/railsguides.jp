@@ -66,28 +66,8 @@ require "pry"
 
 texts_hashs = RailsGuides::SearchGenerator.new.generate
 
-db = GuideSearch::Database.new
-db_base_dir = File.expand_path('../tmp', __FILE__)
-db.open(db_base_dir)
-entries = Groonga["Entries"]
-bigram = Groonga["Bigram"]
-
-# entries = Groonga["Entries"]
-# entries.add("String#sub",
-#             name: "sub",
-#             summary: "置換",
-#             description: "1つ置換")
-# entries.add("String#gsub",
-#             name: "gsub",
-#             summary: "置換",
-#             description: "全部置換")
-
-# RailsGuides::Markdown
-dom_id_text = -> text { text.downcase.strip.gsub(/\s+/, '-') }
-
-texts_hashs.each do |hash|
-  html_name = hash[:html_name]
-  hash[:text_groups].each do |text_group|
-    entries.add("#{html_name}##{dom_id_text[text_group.header_text]}", description: text_group.description)
-  end
+database = GuideSearch::Database.new
+database_base_dir = File.expand_path('../tmp', __FILE__)
+database.open(database_base_dir) do |db|
+  GuideSearch::Indexer.new(db, texts_hashs).index
 end
