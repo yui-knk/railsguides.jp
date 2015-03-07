@@ -40,14 +40,14 @@ module RailsGuides
       # else
         body = File.read(File.join(source_dir, guide))
         body = body << references_md(guide) if references?(guide)
-        @markdown = RailsGuides::SearchMarkdown.new(view, layout)
-        result = @markdown.render(body)
+        markdown = RailsGuides::SearchMarkdown.new(view, layout)
+        result = markdown.render(body)
 
         warn_about_broken_links(result) if @warnings
       # end
 
       html_name = guide.sub(".md", ".html")
-      { html_name: html_name, text_groups: @markdown.send(:engine).renderer.text_groups }
+      { html_name: html_name, text_groups: markdown.send(:engine).renderer.text_groups }
     end
   end
 end
