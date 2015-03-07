@@ -16,13 +16,13 @@ module GuideSearch
         FileUtils.mkdir_p(base_path)
         populate(path)
       end
-      # if block_given?
-      #   begin
-      #     yield(self)
-      #   ensure
-      #     close unless closed?
-      #   end
-      # end
+      if block_given?
+        begin
+          yield(self)
+        ensure
+          close unless closed?
+        end
+      end
     end
 
     def populate(path)
