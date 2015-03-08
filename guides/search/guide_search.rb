@@ -1,3 +1,4 @@
+# see https://github.com/clear-code/rurema-search
 module GuideSearch
 end
 
