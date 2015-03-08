@@ -18,4 +18,5 @@ gem 'nokogiri'
 gem 'newrelic_rpm'
 
 gem 'rroonga'
+gem 'sinatra'
 gem 'pry'
