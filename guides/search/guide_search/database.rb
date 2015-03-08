@@ -3,14 +3,15 @@ require "groonga"
 module GuideSearch
   class Database
     def initialize
-      Groonga::Context.default_options = {encoding: :utf8}
+      @context = nil
       @database = nil
     end
 
     def open(base_path)
+      reset_context
       path = File.join(base_path, "guide.db")
       if File.exist?(path)
-        @database = Groonga::Database.open(path)
+        @database = @context.open_database(path)
         populate_schema
       else
         FileUtils.mkdir_p(base_path)
@@ -25,8 +26,21 @@ module GuideSearch
       end
     end
 
+    def reopen
+      base_path = File.dirname(@database.path)
+      # encoding = @database.encoding
+      close
+      # open(base_path, encoding)
+      open(base_path)
+    end
+
+    def reset_context
+      @context.close if @context
+      @context = Groonga::Context.new(encoding: :utf8)
+    end
+
     def populate(path)
-      @database = Groonga::Database.create(path: path) #(:path: => "/tmp/bookmark.db")
+      @database = @context.create_database(path: path) #(path: "/tmp/bookmark.db")
       populate_schema
     end
 
@@ -37,12 +51,15 @@ module GuideSearch
       directory = File.dirname(path)
       FileUtils.rm_rf(directory)
       FileUtils.mkdir_p(directory)
+      reset_context
       populate(path)
     end
 
     def close
       @database.close
       @database = nil
+      @context.close
+      @context = nil
     end
 
     def closed?
@@ -50,11 +67,11 @@ module GuideSearch
     end
 
     def entries
-      Groonga["Entries"]
+      @context["Entries"]
     end
 
     def populate_schema
-      Groonga::Schema.define do |schema|
+      Groonga::Schema.define(context: @context) do |schema|
         schema.create_table("Entries",
                             :type => :hash,
                             :key_type => "ShortText") do |table|
